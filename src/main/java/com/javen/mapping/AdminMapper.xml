@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javen.dao.AdminDao">
+	<resultMap id="Admin" type="com.javen.model.Admin">
+	    <id column="id" jdbcType="INTEGER" property="id" />
+	    <result column="aNo" jdbcType="INTEGER" property="aNo"/>
+	    <result column="adminNmae" jdbcType="VARCHAR" property="adminName" />
+	    <result column="aPassword" jdbcType="VARCHAR" property="aPassword" />
+	    <result column="aType" jdbcType="VARCHAR" property="aType" />
+    </resultMap>
+  <sql id="Base_Column_List">
+    id, aNo, adminName, aPassword, aType
+  </sql>
+  <select id="getAdminByNo" resultMap="Admin" parameterType="java.lang.Integer">
+  	select <include refid="Base_Column_List"/>
+  	from t_admin
+  	where aNo = #{aNo,jdbcType=INTEGER}
+  </select>
+  <select id="getAdminAll" resultMap="Admin" parameterType="com.javen.model.Admin">
+  	select <include refid="Base_Column_List"/>
+  	from t_admin
+  </select>
+  <insert id="insertAdmin" parameterType="com.javen.model.Admin">
+  	insert into t_admin (id,aNo,adminName,aPassword,aType)
+  	values(#{id},#{aNo},#{adminName},#{aPassword},#{aType})
+  </insert>
+  <delete id="deleteAdminByNo" parameterType="com.javen.model.Admin">
+  	delete 
+  	from t_admin
+  	where aNo = #{aNo}
+  </delete>
+  <update id="updateAdminByNo" parameterType="com.javen.model.Admin">
+  	update t_admin
+  	set aNo=#{aNo},adminName=#{adminName},aPassword=#{aPassword},aType=#{aType}
+  	where aNo = #{aNo}
+  </update>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javen.dao.FileDao">
+	<select id="findByid" resultType="com.javen.model.FileEntity" parameterType="java.lang.Long">
+
+		select * from t_videoup where fileId=#{id};
+	</select>
+
+	<select id="findAll" resultType="com.javen.model.FileEntity">
+
+		select * from t_videoup;
+	</select>
+	<select id="getFileByFileName" resultType="com.javen.model.FileEntity" parameterType="java.lang.String">
+		select * from t_videoup where titleOrig=#{titleOrig};
+	</select>
+	<select id="getFileByFileType" resultType="com.javen.model.FileEntity" parameterType="java.lang.String">
+		select * from t_videoup where type=#{type};
+	</select>
+	<select id="getFileByFileUploadTime" resultType="com.javen.model.FileEntity" parameterType="java.lang.String">
+		select * from t_videoup
+		where (select date_format(uploadTime,'%Y-%m-%d')) = #{uploadTime};
+	</select>
+	<!-- 注意重要返回类型Map -->
+	<select id="getGroupFileByDate" resultType="Map">
+		select uploadTime,GROUP_CONCAT(fileId)
+		from t_videoup
+		GROUP BY uploadTime;
+	</select>
+	<select id="getFileUploadTime" resultType="com.javen.model.FileEntity">
+		select *
+		from t_videoup
+		GROUP BY uploadTime
+		ORDER BY uploadTime DESC
+		LIMIT 3;
+	</select>
+	<!-- 查询 点击量最高的五个视频-->
+	<select id="getVideoByPlayingAmount" parameterType="java.lang.Integer" resultType="com.javen.model.FileEntity">
+		select *
+		from t_videoup
+		GROUP BY playingAmount
+		ORDER BY playingAmount DESC
+		LIMIT 5;
+	</select>
+	<delete id="deleteFileById" parameterType="java.lang.Long">
+		delete from t_videoup where fileId=#{id};
+	</delete>
+	
+	<!-- 分页获取数据 -->
+	<select id="getFileByPage" parameterType="com.javen.model.Page" resultType="com.javen.model.FileEntity">
+		select * from t_videoup
+		order by fileId asc
+		limit #{startIndex},#{pageSize};
+	</select>
+	<!-- 查询设备的数量 -->
+	<select id="getTotalDataCount" resultType="int">
+		select count(1) from t_videoup;
+	</select>
+
+	<insert id="saveFile" parameterType="com.javen.model.FileEntity">
+		INSERT INTO `t_videoup` (titleOrig, titleAlter,picturePath, size, type, path, uploadTime)
+		VALUES(#{titleOrig}, #{titleAlter},#{picturePath}, #{size}, #{type}, #{path},#{uploadTime})
+
+	</insert>
+	<update id="updateFileById" parameterType="com.javen.model.FileEntity">
+		update t_videoup 
+		set titleOrig = #{titleOrig},
+		    titleAlter = #{titleAlter},
+		    picturePath = #{picturePath},
+		    size=#{size},
+		    type=#{type},
+		    path=#{path},
+		    uploadTime=#{uploadTime}
+		where fileId=#{fileId};
+	</update>
+	<!-- 实时更新插入视频的点击量 -->
+	<update id="updateVideoPlayingAmount" parameterType="com.javen.model.FileEntity">
+		update t_videoup
+		set playingAmount = #{playingAmount}
+		where fileId = #{fileId};
+	</update>
+</mapper>

@@ -1,0 +1,7 @@
+com.javen.controller
+com.javen.dao
+com.javen.model
+com.javen.service
+com.javen.serviceImpl
+com.javen.testmybatis
+com.javen.util

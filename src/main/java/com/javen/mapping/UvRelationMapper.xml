@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javen.dao.UvRelationDao">
+    <select id="getVideoIdByUserHistory" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    	select fileId 
+    	from t_uvrelation 
+    	where uId = #{uId}
+    	ORDER BY u_vId DESC
+    	LIMIt 8;
+    </select>
+    <insert id="insertUvRelation" parameterType="com.javen.model.UvRelation">
+    	insert into t_uvrelation (uId,fileId)
+    	values(#{uId},#{fileId});
+    </insert>
+</mapper>
